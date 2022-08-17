@@ -16,12 +16,12 @@ export const getServerSideProps = async (context) => {
 const Home = ({ products }) => {
   console.table(products);
   return (
-    <div>
+    <div >
       <Nav />
       <h1 className="font-medium leading-tight text-5xl mt-0 mb-2 text-blue-600">
         Home
       </h1>
-      <ProductForm />
+      <ProductForm/>
       <h1 className="font-medium leading-tight text-5xl mt-0 mb-2 text-blue-600">
         Products{" "}
       </h1>

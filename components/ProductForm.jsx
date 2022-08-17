@@ -1,30 +1,52 @@
-import axios from 'axios';
+import axios from "axios";
+import { useState } from "react";
+
+const styles = {
+  container: "w-full max-w-xs mx-auto",
+  form: "bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4",
+  input: "border border-gray-400 rounded-xs block w-full px-3 py-2 mb-2",
+  button:
+    "bg-blue-500 hover:bg-blue-700 active:bg-blue-500 text-white font-bold py-2 px-4 rounded-xs w-full mt-2",
+};
+
+const lebelNames = ["name", "price", "description"];
 
 const ProductForm = () => {
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const res = await axios.post('/api/products', {
-            name: "Product Name",
-            description: "Product Description",
-            price: 1000
-        })
-        console.log(res);
-    }
+  const [product, setProduct] = useState({
+    name: "",
+    price: 0,
+    description: "",
+  });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const res = await axios.post("/api/products", product);
+    console.log(res);
+  };
+
+  const handleChange = ({ target: { name, value } }) =>
+    setProduct({ ...product, [name]: value });
+
   return (
-    <div className="bg-gray-200 p-2">
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="name">Name: </label>
-        <input type="text" id="name" />
+    <div className={styles.container}>
+      <form className={styles.form} onSubmit={handleSubmit}>
 
-        <label htmlFor="price">Price: </label>
-        <input type="text" id="price" />
-
-        <label htmlFor="description">Description: </label>
-        <input type="text" id="description" />
-
-        <button className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded my-3">
-          Save Product
-        </button>
+          {lebelNames.map((name, index) => (
+            <div key={index}>
+              <label htmlFor={name}>
+                {" "}
+                {name.charAt(0).toUpperCase() + name.slice(1)}:{" "}
+              </label>
+              <input
+                className={styles.input}
+                type="text"
+                name={name}
+                onChange={handleChange}
+              />
+            </div>
+          ))}
+        
+        <button className={styles.button}>Save Product</button>
       </form>
     </div>
   );
