@@ -1,3 +1,12 @@
-export default function Home() {
-  return <h1 className="text-3xl font-bold underline">Hello world!</h1>;
-}
+import Layout from "../components/Layout";
+import ProductForm from "../components/ProductForm";
+
+const NewPage = () => {
+  return (
+    <Layout>
+      <ProductForm />;
+    </Layout>
+  );
+};
+
+export default NewPage;

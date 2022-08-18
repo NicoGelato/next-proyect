@@ -1,5 +1,8 @@
 import axios from "axios";
 import { useState } from "react";
+import { useRouter } from "next/router";
+
+const lebelNames = ["name", "price", "description"];
 
 const styles = {
   container: "w-full max-w-xs mx-auto",
@@ -9,8 +12,6 @@ const styles = {
     "bg-blue-500 hover:bg-blue-700 active:bg-blue-500 text-white font-bold py-2 px-4 rounded-xs w-full mt-2",
 };
 
-const lebelNames = ["name", "price", "description"];
-
 const ProductForm = () => {
   const [product, setProduct] = useState({
     name: "",
@@ -18,10 +19,13 @@ const ProductForm = () => {
     description: "",
   });
 
+  const router = useRouter();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const res = await axios.post("/api/products", product);
     console.log(res);
+    router.push('/')
   };
 
   const handleChange = ({ target: { name, value } }) =>
@@ -30,22 +34,21 @@ const ProductForm = () => {
   return (
     <div className={styles.container}>
       <form className={styles.form} onSubmit={handleSubmit}>
+        {lebelNames.map((name, index) => (
+          <div key={index}>
+            <label htmlFor={name}>
+              {" "}
+              {name.charAt(0).toUpperCase() + name.slice(1)}:{" "}
+            </label>
+            <input
+              className={styles.input}
+              type="text"
+              name={name}
+              onChange={handleChange}
+            />
+          </div>
+        ))}
 
-          {lebelNames.map((name, index) => (
-            <div key={index}>
-              <label htmlFor={name}>
-                {" "}
-                {name.charAt(0).toUpperCase() + name.slice(1)}:{" "}
-              </label>
-              <input
-                className={styles.input}
-                type="text"
-                name={name}
-                onChange={handleChange}
-              />
-            </div>
-          ))}
-        
         <button className={styles.button}>Save Product</button>
       </form>
     </div>
