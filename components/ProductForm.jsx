@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 const lebelNames = ["name", "price", "description"];
 
 const styles = {
-  container: "w-full max-w-xs mx-auto",
+  container: "container w-full max-w-xs mx-auto",
   form: "bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4",
   input: "border border-gray-400 rounded-xs block w-full px-3 py-2 mb-2",
   button:

@@ -4,22 +4,27 @@ import Link from "next/link";
 
 const styles = {
   card: "card flex flex-col m-2 p-2 border-2 border-gray-400",
+  title: "font-medium  text-3xl mt-0 mb-2 text-blue-600",
+  p: "font-medium  text-2xl mt-0 mb-2 text-blue-600",
   button:
     "bg-blue-500 hover:bg-blue-700 active:bg-blue-500 text-white font-bold py-2 px-4 rounded-xs w-full mt-auto",
 };
 
 const Home = ({ products }) => {
+
+  console.log(products);
+
   return (
     <Layout>
       <div className=" grid grid-cols-1 md:grid-cols-4">
         {products.map(({ id, name, price, description }) => (
           <div key={id} className={styles.card}>
-            <h2 className="font-medium  text-3xl mt-0 mb-2 text-blue-600">
+            <h2 className={styles.title}>
               {" "}
               {name}{" "}
             </h2>
-            <p className="font-medium  text-2xl mt-0 mb-2 "> {description} </p>
-            <p className="font-medium  text-2xl mt-0 mb-2 "> ${price} </p>
+            <p className={styles.p}> {description} </p>
+            <p className={styles.p}> $ {price} </p>
             <Link href={`/products/${id}`}>
               <a className={styles.button}>
                 <button>Más detalles</button>
