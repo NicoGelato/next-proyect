@@ -16,6 +16,7 @@ const Home = ({ products }) => {
 
   return (
     <Layout>
+      <button className={styles.button}>Ordenar</button>
       <div className=" grid grid-cols-1 md:grid-cols-4">
         {products.map(({ id, name, price, description }) => (
           <div key={id} className={styles.card}>

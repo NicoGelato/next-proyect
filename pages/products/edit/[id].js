@@ -1,9 +1,2 @@
-import React from 'react'
-
-const editPage = () => {
-  return (
-    <div>editPage</div>
-  )
-}
-
-export default editPage
+import NewPage from "../../new";
+export default NewPage;

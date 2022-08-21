@@ -6,6 +6,8 @@ export default async function handler(req, res) {
       return await getProduct(req, res);
     case "DELETE":
       return await deleteProduct(req, res);
+    case "PUT":
+      return await updateProduct(req, res);
     default:
       break;
   }
@@ -20,7 +22,23 @@ const getProduct = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
   const { id } = await req.query;
-  const [result] = await pool.query(`DELETE FROM products WHERE id = ${id}`);
+  await pool.query(`DELETE FROM products WHERE id = ${id}`);
 
   return res.status(204).json();
+};
+
+const updateProduct = async (req, res) => {
+  const { id } = await req.query;
+  const { name, description, price } = req.body;
+  try {
+    await pool.query(
+      'UPDATE products SET name = ?, description = ?, price = ? WHERE id = ?',
+      [name, description, price , id]
+    );
+
+    return res.status(204).json();
+  } catch (error) {
+    console.error(error.message);
+    console.error("Te equivocaste");
+  }
 };

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 const lebelNames = ["name", "price", "description"];
@@ -23,13 +23,31 @@ const ProductForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await axios.post("/api/products", product);
-    console.log(res);
-    router.push('/')
+    if (router.query.id) {
+      const res = await axios.put(`/api/products/${router.query.id}`, product);
+      console.log(res);
+      router.push("/");
+    } else {
+      const res = await axios.post("/api/products", product);
+      console.log(res);
+      router.push("/");
+    }
   };
 
   const handleChange = ({ target: { name, value } }) =>
     setProduct({ ...product, [name]: value });
+
+  useEffect(() => {
+    const getProduct = async () => {
+      const { data } = await axios.get(`/api/products/${router.query.id}`);
+      setProduct(data);
+      // console.log(data);
+    };
+
+    if (router.query.id) {
+      getProduct(router.query.id);
+    }
+  }, [router]);
 
   return (
     <div className={styles.container}>
@@ -45,11 +63,14 @@ const ProductForm = () => {
               type="text"
               name={name}
               onChange={handleChange}
+              value={product[name]}
             />
           </div>
         ))}
 
-        <button className={styles.button}>Save Product</button>
+        <button className={styles.button}>
+          {router.query.id ? "Actualizar" : "Guardar"}
+        </button>
       </form>
     </div>
   );
