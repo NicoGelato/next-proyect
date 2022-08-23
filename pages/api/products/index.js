@@ -17,6 +17,7 @@ const setProducts = async (req, res) => {
 };
 
 const getProducts = async (req, res) => {
+  console.log( req.query);
   const [result] = await pool.query("SELECT * FROM products");
   return res.status(200).json(result);
 };

@@ -1,6 +1,9 @@
 import Layout from "../components/Layout";
 import axios from "axios";
 import Link from "next/link";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import useSessionStorage from "../hooks/useSessionStorage";
 
 const styles = {
   card: "card flex flex-col m-2 p-2 border-2 border-gray-400",
@@ -10,20 +13,44 @@ const styles = {
     "bg-blue-500 hover:bg-blue-700 active:bg-blue-500 text-white font-bold py-2 px-4 rounded-xs w-full mt-auto",
 };
 
-const Home = ({ products }) => {
+const ordenar = (arr) => {
+  const ordenado = arr.sort((a, b) => {
+    return a.price - b.price;
+  });
 
-  console.log(products);
+  return ordenado;
+};
+
+const Home = ({ products }) => {
+  const [productState, setProductState] = useState(products);
+
+  const [storedValue, setValue] = useSessionStorage("products", products);
+
+  const router = useRouter();
+
+  const handleSort = () => {
+    const ordenado = ordenar(products);
+    console.log(ordenado);
+    setValue(ordenado);
+    setProductState(storedValue);
+    router.push("/");
+
+    // Averiguar que onda el sessionStorage con el getServerSideProps
+  };
+
+  useEffect(() => {
+    setProductState(storedValue);
+  }, [storedValue]);
 
   return (
     <Layout>
-      <button className={styles.button}>Ordenar</button>
+      <button onClick={() => handleSort()} className={styles.button}>
+        Ordenar por precio
+      </button>
       <div className=" grid grid-cols-1 md:grid-cols-4">
-        {products.map(({ id, name, price, description }) => (
+        {productState.map(({ id, name, price, description }) => (
           <div key={id} className={styles.card}>
-            <h2 className={styles.title}>
-              {" "}
-              {name}{" "}
-            </h2>
+            <h2 className={styles.title}> {name} </h2>
             <p className={styles.p}> {description} </p>
             <p className={styles.p}> $ {price} </p>
             <Link href={`/products/${id}`}>
@@ -42,6 +69,7 @@ export const getServerSideProps = async (context) => {
   const { data: products } = await axios.get(
     "http://localhost:3000/api/products"
   );
+
   return {
     props: {
       products,
